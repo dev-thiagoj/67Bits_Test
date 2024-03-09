@@ -17,12 +17,6 @@ public class CharacterMovements : MonoBehaviour
     int _run;
     int _animSpeed;
 
-    [Header("Punch Setup")]
-    [SerializeField] float impulseSpeed;
-    [SerializeField] float impulseDistance;
-    [SerializeField] float impulseDelay;
-    int _punch;
-
     public bool CanMove
     {
         get => _canMove;
@@ -33,7 +27,6 @@ public class CharacterMovements : MonoBehaviour
     {
         InputActions.Gameplay.Run.performed -= ctx => _currSpeed = runSpeed;
         InputActions.Gameplay.Run.canceled -= ctx => _currSpeed = walkSpeed;
-        InputActions.Gameplay.Punch.performed -= ctx => StartCoroutine(PunchCouroutine());
         InputActions.Disable();
     }
 
@@ -50,7 +43,6 @@ public class CharacterMovements : MonoBehaviour
 
         _walk = Animator.StringToHash("Walk");
         _run = Animator.StringToHash("Run");
-        _punch = Animator.StringToHash("Punch");
         _animSpeed = Animator.StringToHash("AnimSpeed");
     }
 
@@ -59,7 +51,7 @@ public class CharacterMovements : MonoBehaviour
         // Trigger the run
         InputActions.Gameplay.Run.performed += ctx => _currSpeed = runSpeed;
         InputActions.Gameplay.Run.canceled += ctx => _currSpeed = walkSpeed;
-        InputActions.Gameplay.Punch.performed += ctx => StartCoroutine(PunchCouroutine());
+        
 
         //Debug
         CanMove = true;
@@ -88,28 +80,13 @@ public class CharacterMovements : MonoBehaviour
         transform.Rotate(0, rotateVector, 0);
 
         // Movement
-        var moveVector = _currSpeed * input.y * Time.deltaTime * transform.forward;
-        Controller.Move(moveVector);
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+        var movement = input.y * _currSpeed;
+        Controller.SimpleMove(movement * forward);
 
         // Set animator state
         Animator.SetFloat(_animSpeed, input.y);
         Animator.SetBool(_walk, input != Vector2.zero);
         Animator.SetBool(_run, input != Vector2.zero && _currSpeed == runSpeed);
-    }
-
-    IEnumerator PunchCouroutine()
-    {
-        var target = transform.position + (impulseDistance * transform.forward);
-        var movement = impulseSpeed * Time.deltaTime * transform.forward;
-
-        Animator.SetTrigger(_punch);
-
-        yield return new WaitForSeconds(impulseDelay);
-
-        while (transform.position.z < target.z)
-        {
-            Controller.Move(movement);
-            yield return new WaitForEndOfFrame();
-        }
     }
 }
