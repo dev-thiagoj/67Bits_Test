@@ -2,11 +2,11 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterMovements))]
+[RequireComponent(typeof(PlayerMovements))]
 public class PunchAbility : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] CharacterMovements _movements;
+    [SerializeField] PlayerMovements _movements;
 
     [Header("Punch Setup")]
     [SerializeField] float punchForce;
@@ -37,7 +37,7 @@ public class PunchAbility : MonoBehaviour
     void Start()
     {
         if (!_movements)
-            _movements = GetComponent<CharacterMovements>();
+            _movements = GetComponent<PlayerMovements>();
 
         _movements.InputActions.Gameplay.Punch.performed += ctx
             => StartCoroutine(PunchCouroutine());

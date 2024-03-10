@@ -1196,7 +1196,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2211343336713263223}
   - component: {fileID: 2211343336713263219}
-  - component: {fileID: 2211343336713263220}
+  - component: {fileID: 1979979041320285603}
+  - component: {fileID: 9083965748823154323}
   - component: {fileID: 7687730202065312774}
   - component: {fileID: 1141863747739460086}
   m_Layer: 0
@@ -1250,7 +1251,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.35, z: 0}
---- !u!114 &2211343336713263220
+--- !u!114 &1979979041320285603
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1259,11 +1260,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2211343336713263208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ec10dfc5f9b8aa4b971cc2b15d6be13, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ae10195b87b21e458e137d223417639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
-  runSpeed: 8
+--- !u!114 &9083965748823154323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2211343336713263208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b972597a2f7408349ad58b84844bb470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 2
+  runSpeed: 5
   rotationSpeed: 50
 --- !u!114 &7687730202065312774
 MonoBehaviour:
@@ -1277,10 +1290,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf887f529f7d2840806b80bcae6a65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movements: {fileID: 2211343336713263220}
+  _movements: {fileID: 9083965748823154323}
   punchForce: 15000
   punchCooldown: 2
-  rayDistance: 2
+  rayDistance: 5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -1305,9 +1318,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f89eb7926f6bbb45baa4a54547378d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cMovement: {fileID: 9083965748823154323}
   bodiesSensor: {fileID: 8547579725247085829}
-  bodyPFB: {fileID: 1480833084654655126, guid: e04c75ae385766a44a20105731f0deb2, type: 3}
+  bodyPFB: {fileID: 1719928828801630655, guid: 5ce043de1eb5019408477d99426006b5, type: 3}
   heightOffset: 0.3
+  maxAngle: 10
+  speed: 1
+  delay: 0.05
+  OnMove:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2484575654860972110
 GameObject:
   m_ObjectHideFlags: 0
@@ -3282,7 +3302,7 @@ Transform:
   m_GameObject: {fileID: 8675674343261694564}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.924, y: 1.74, z: -0.514}
+  m_LocalPosition: {x: -0.016, y: 1.74, z: -0.514}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -3357,8 +3377,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.4946643, y: 2.211409, z: 0.9850311}
-  m_Center: {x: 0.86001986, y: -0.60570455, z: 0.7530241}
+  m_Size: {x: 1.1020637, y: 0.7205808, z: 1.0464296}
+  m_Center: {x: 0.0054900646, y: -1.3511187, z: 0.78372335}
 --- !u!114 &8547579725247085829
 MonoBehaviour:
   m_ObjectHideFlags: 0

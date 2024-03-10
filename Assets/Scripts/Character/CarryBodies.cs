@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class CarryBodies : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] CharacterMovements cMovement;
+    [SerializeField] PlayerMovements cMovement;
     [SerializeField] BodySensor bodiesSensor;
     [SerializeField] BodyBag bodyPFB;
     [Tooltip("Height offset between bodies")]
@@ -16,17 +16,20 @@ public class CarryBodies : MonoBehaviour
     [SerializeField] float maxAngle;
     [SerializeField] float speed;
     [SerializeField] float delay;
+    bool canMove;
+    Coroutine currCoroutine;
 
     readonly List<BodyBag> _bodyBags = new();
 
+    [Space]
     public UnityEvent<float, int> OnMove;
 
-    Coroutine currCoroutine;
+    public List<BodyBag> Bodies => _bodyBags; 
 
 #if UNITY_EDITOR
     private void Reset()
     {
-        cMovement = GetComponent<CharacterMovements>();
+        cMovement = GetComponent<PlayerMovements>();
         bodiesSensor = GetComponentInChildren<BodySensor>();
 
         //default value
@@ -34,21 +37,14 @@ public class CarryBodies : MonoBehaviour
     }
 #endif
 
-    //private void FixedUpdate()
-    //{
-    //    if (_bodyBags.Count <= 0)
-    //        return;
+    private void Update()
+    {
+        if (!canMove && currCoroutine != null)
+            StopCoroutine(currCoroutine);
+    }
 
-    //    float direction = cMovement.MovementX;
-    //    float angle = direction * maxAngle;
+    public void CanMove(bool value) => canMove = value;
 
-    //    for (int i = 0; i < _bodyBags.Count; i++)
-    //    {
-    //        BodyBag body = _bodyBags[i];
-    //        body.Rotate(angle, speed);
-    //        //yield return new WaitForSeconds(delay);
-    //    }
-    //}
 
     [ContextMenu("Add Body")]
     public void Add()
@@ -73,7 +69,14 @@ public class CarryBodies : MonoBehaviour
 
         SetInertiaMovements();
     }
+    public void Remove(int index)
+    {
+        Destroy(_bodyBags[index].gameObject);
+        _bodyBags.RemoveAt(index);
+    }
 
+    #region Debug
+#if UNITY_EDITOR
     [ContextMenu("Debug Bodies")]
     void DebugBodies()
     {
@@ -102,17 +105,8 @@ public class CarryBodies : MonoBehaviour
             SetInertiaMovements();
         }
     }
-
-    public void Remove()
-    {
-        for (int i = 0; i < _bodyBags.Count; i++)
-        {
-            Destroy(_bodyBags[i].gameObject);
-            _bodyBags.Remove(_bodyBags[i]);
-        }
-
-        _bodyBags.Clear();
-    }
+#endif
+#endregion
 
     void SetInertiaMovements()
     {
@@ -121,6 +115,9 @@ public class CarryBodies : MonoBehaviour
             StopCoroutine(currCoroutine);
             currCoroutine = null;
         }
+
+        if(!canMove)
+            canMove = !canMove;
 
         Coroutine coroutine = StartCoroutine(InertiaMovement());
         currCoroutine = coroutine;
@@ -136,6 +133,7 @@ public class CarryBodies : MonoBehaviour
             for (int i = 0; i < _bodyBags.Count; i++)
             {
                 yield return new WaitForSeconds(delay);
+
                 BodyBag body = _bodyBags[i];
                 body.Rotate(angle, speed);
             }
