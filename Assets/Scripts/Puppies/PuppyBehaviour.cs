@@ -40,6 +40,8 @@ public class PuppyBehaviour : MonoBehaviour
             coll.enabled = true;
         }
 
+        mainRB.detectCollisions = false;
+
         var child = transform.GetChild(1);
         var obj = Instantiate(triggerPFB, child);
 

@@ -14,12 +14,16 @@ public class PunchAbility : MonoBehaviour
     [SerializeField] float rayDistance;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] float effectDelay;
+    [SerializeField] float upwardModifier;
     float _punchTimer;
     int _punchHash;
 
     [Header("Punch Effect")]
+    [SerializeField] GameObject[] arms;
     [SerializeField] float animScale;
-    [SerializeField] float AnimDuration;
+    [SerializeField] float animStepTime;
+    [SerializeField] float waitingTime;
+    [SerializeField] float startDelay;
 
     readonly RaycastHit[] _results = new RaycastHit[5];
 
@@ -63,14 +67,16 @@ public class PunchAbility : MonoBehaviour
         _punchTimer = punchCooldown;
 
         PuppyBehaviour puppy = GetPuppy();
-       
+
         _movements.Animator.SetTrigger(_punchHash);
+        StartCoroutine(PunchEffect());
+
         yield return new WaitForSeconds(effectDelay);
 
         if (!puppy)
             yield break;
 
-        PunchEffect(puppy);
+        PunchDamage(puppy);
     }
 
     PuppyBehaviour GetPuppy()
@@ -91,11 +97,11 @@ public class PunchAbility : MonoBehaviour
         return null;
     }
 
-    void PunchEffect(PuppyBehaviour puppy)
+    void PunchDamage(PuppyBehaviour puppy)
     {
         Vector3 explosionPos = transform.position;
         Collider[] colliders = new Collider[10];
-            
+
         int numColliders = Physics.OverlapSphereNonAlloc(explosionPos, 5, colliders);
 
         for (int i = 0; i < numColliders; i++)
@@ -105,14 +111,41 @@ public class PunchAbility : MonoBehaviour
             if (!collider.transform.CompareTag("Puppies"))
                 continue;
 
-            if(!collider.TryGetComponent(out Rigidbody rb))
+            if (!collider.TryGetComponent(out Rigidbody rb))
                 continue;
 
             rb.mass = 1;
-            rb.AddExplosionForce(punchForce, explosionPos, 3, 3);
+            rb.AddExplosionForce(punchForce, explosionPos, 2, upwardModifier);
 
             puppy.EnableRagdoll();
             break;
+        }
+    }
+
+    IEnumerator PunchEffect()
+    {
+        Vector3 step = new(0.1f, 0.1f, 0.1f);
+
+        yield return new WaitForSeconds(startDelay);
+
+        while (arms[0].transform.localScale.x <= animScale)
+        {
+            foreach (GameObject arm in arms)
+            {
+                arm.transform.localScale += step;
+            }
+            yield return new WaitForSeconds(animStepTime);
+        }
+
+        yield return new WaitForSeconds(waitingTime);
+
+        while (arms[0].transform.localScale.x > 1)
+        {
+            foreach (GameObject arm in arms)
+            {
+                arm.transform.localScale -= step;
+            }
+            yield return new WaitForSeconds(animStepTime);
         }
     }
 }
