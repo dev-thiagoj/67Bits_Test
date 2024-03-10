@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class CharacterMovements : MonoBehaviour
@@ -13,9 +12,13 @@ public class CharacterMovements : MonoBehaviour
     [SerializeField] float rotationSpeed;
     float _currSpeed;
     bool _canMove;
+
+
     int _walk;
     int _run;
     int _animSpeed;
+
+    public float MovementX { get; private set; }
 
     public bool CanMove
     {
@@ -51,7 +54,7 @@ public class CharacterMovements : MonoBehaviour
         // Trigger the run
         InputActions.Gameplay.Run.performed += ctx => _currSpeed = runSpeed;
         InputActions.Gameplay.Run.canceled += ctx => _currSpeed = walkSpeed;
-        
+
 
         //Debug
         CanMove = true;
@@ -74,6 +77,7 @@ public class CharacterMovements : MonoBehaviour
 
         // Read input values
         Vector2 input = InputActions.Gameplay.Movement.ReadValue<Vector2>();
+        MovementX = input.x;
 
         // Rotate
         var rotateVector = input.x * rotationSpeed * Time.deltaTime;

@@ -1,62 +1,19 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BodyBag : MonoBehaviour
 {
-    [SerializeField] bool usingCharMovement;
-    [HideInInspector] public UnityEvent<float> moveEvent;
+    Vector3 currRotation;
 
-    //Animator _animator;
-    float _direction;
-    public int bagIndex;
-
-    public bool BagFilled { get; private set; }
-
-    private void Awake()
+    public void Rotate(float amount, float speed)
     {
-        //_animator = GetComponent<Animator>();
-    }
+        Vector3 target = Vector3.zero;
+        target.z = amount;
 
-    private void Start()
-    {
-        if (bagIndex == 0)
-        {
-            usingCharMovement = true;
-        }
-    }
+        currRotation = target;
 
-    private void Update()
-    {
-        //_animator.SetFloat("Blend", _direction);
-
-        if (usingCharMovement)
-        {
-            GetMovement();
-        }
-    }
-
-    void GetMovement()
-    {
-        //float directionX = CharacterMovements.Instance.movement.x;
-        //float dir = Mathf.Lerp(_direction, directionX, Time.deltaTime);
-        //Move(dir);
-    }
-
-    public void Move(float f)
-    {
-        _direction = f;
-        StartCoroutine(MoveDelay(f));
-    }
-
-    IEnumerator MoveDelay(float direction)
-    {
-        yield return new WaitForSeconds(.4f);
-        moveEvent.Invoke(direction * -1);
-    }
-
-    public void ChangeStatus()
-    {
-        BagFilled = !BagFilled;
+        transform.localRotation = Quaternion.Euler(Vector3.Lerp(
+            currRotation,
+            target,
+            speed * Time.deltaTime));
     }
 }

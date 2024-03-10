@@ -27,7 +27,7 @@ public class BodyBagPool : MonoBehaviour
 
     public void CreateBagsPool(int level)
     {
-        carryBodies.Delete();
+        carryBodies.Remove();
 
         bagPoolSize = 3;
 

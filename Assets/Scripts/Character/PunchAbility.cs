@@ -66,9 +66,9 @@ public class PunchAbility : MonoBehaviour
 
         _punchTimer = punchCooldown;
 
+        _movements.Animator.SetTrigger(_punchHash);
         PuppyBehaviour puppy = GetPuppy();
 
-        _movements.Animator.SetTrigger(_punchHash);
         StartCoroutine(PunchEffect());
 
         yield return new WaitForSeconds(effectDelay);
@@ -100,7 +100,7 @@ public class PunchAbility : MonoBehaviour
     void PunchDamage(PuppyBehaviour puppy)
     {
         Vector3 explosionPos = transform.position;
-        Collider[] colliders = new Collider[10];
+        Collider[] colliders = new Collider[20];
 
         int numColliders = Physics.OverlapSphereNonAlloc(explosionPos, 5, colliders);
 
