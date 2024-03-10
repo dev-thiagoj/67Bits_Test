@@ -558,7 +558,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3210726615805888811}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0.036, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -568,7 +568,7 @@ Transform:
   - {fileID: 977369144554515839}
   - {fileID: 4416812427658463599}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &327561135677518709
 Animator:
   serializedVersion: 7
@@ -605,10 +605,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 327561135677518709}
   triggerPFB: {fileID: 7498666780836966910, guid: 2b21223d01340134bb97bb5efe2b10f1, type: 3}
-  mainCollider: {fileID: 0}
-  mainRB: {fileID: 0}
-  rbs: []
-  colls: []
+  bag: {fileID: 0}
+  OnBodyTaked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &5761111718162843013
 BoxCollider:
   m_ObjectHideFlags: 0

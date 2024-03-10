@@ -1,19 +1,30 @@
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PuppyBehaviour : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] Animator animator;
     [SerializeField] GameObject triggerPFB;
-    public Collider mainCollider;
-    public Rigidbody mainRB;
-    public Rigidbody[] rbs;
-    public Collider[] colls;
+    [SerializeField] CarryBodies bag;
+
+    Rigidbody mainRB;
+    Rigidbody[] rbs;
+    Collider[] colls;
+
+    [Space]
+    public UnityEvent OnBodyTaked;
 
     private void Awake()
     {
-        if (animator == null)
+        if (!animator)
             animator = GetComponent<Animator>();
+
+        if (!bag)
+            bag = GameObject.FindFirstObjectByType<CarryBodies>();
     }
 
     private void Start()
@@ -21,10 +32,10 @@ public class PuppyBehaviour : MonoBehaviour
         rbs = GetComponentsInChildren<Rigidbody>();
         colls = GetComponentsInChildren<Collider>();
 
-        mainCollider = colls[0];
         mainRB = rbs[0];
     }
 
+    [ContextMenu("Enable Ragdoll")]
     public void EnableRagdoll()
     {
         animator.enabled = false;
@@ -50,5 +61,12 @@ public class PuppyBehaviour : MonoBehaviour
 
         if (obj.TryGetComponent(out BoxCollider collider))
             collider.isTrigger = true;
+    }
+
+    public void Take()
+    {
+        bag.Add();
+        OnBodyTaked?.Invoke();
+        Destroy(gameObject);
     }
 }
