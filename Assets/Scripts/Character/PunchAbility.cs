@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerMovements))]
 public class PunchAbility : MonoBehaviour
@@ -29,8 +29,18 @@ public class PunchAbility : MonoBehaviour
 
     private void OnDestroy()
     {
-        _movements.InputActions.Gameplay.Punch.performed -= ctx
-            => StartCoroutine(PunchCouroutine());
+        _movements.InputActions.Gameplay.Punch.performed -= Punch;
+          
+    }
+
+    void Punch(InputAction.CallbackContext ctx)
+    {
+        if (_punchTimer > 0)
+            return;
+
+        _punchTimer = punchCooldown;
+
+        StartCoroutine(PunchCouroutine());
     }
 
     // Start is called before the first frame update
@@ -39,8 +49,7 @@ public class PunchAbility : MonoBehaviour
         if (!_movements)
             _movements = GetComponent<PlayerMovements>();
 
-        _movements.InputActions.Gameplay.Punch.performed += ctx
-            => StartCoroutine(PunchCouroutine());
+        _movements.InputActions.Gameplay.Punch.performed += Punch;
 
         _punchHash = Animator.StringToHash("Punch");
     }
@@ -61,11 +70,6 @@ public class PunchAbility : MonoBehaviour
 
     IEnumerator PunchCouroutine()
     {
-        if (_punchTimer > 0)
-            yield break;
-
-        _punchTimer = punchCooldown;
-
         _movements.Animator.SetTrigger(_punchHash);
         PuppyBehaviour puppy = GetPuppy();
 
@@ -75,7 +79,7 @@ public class PunchAbility : MonoBehaviour
 
         if (!puppy)
             yield break;
-        
+
         StartCoroutine(PunchDamage(puppy));
     }
 
@@ -121,6 +125,8 @@ public class PunchAbility : MonoBehaviour
             puppy.EnableRagdoll();
             break;
         }
+
+        yield return new WaitForEndOfFrame();
     }
 
     IEnumerator PunchEffect()
