@@ -16,20 +16,15 @@ public class LevelController : MonoBehaviour
     [SerializeField] Renderer[] renderers;
 
     [Space]
-    public UnityEvent LevelUpped;
-    
+    public UnityEvent<int> OnLevelUpped;
+
+    public LevelSetup Setup => _setup;
     public PlayerLevel CurrentLevel => currentLevel;
-    bool canInvoke;
+    public Setup CurrentSetup => _setup.GetSetupByLevel(currentLevel);
 
     private void Awake()
     {
         currentLevel = PlayerLevel.Noobie;
-    }
-
-    public int BagAmount()
-    {
-        var setup = _setup.GetSetupByLevel(CurrentLevel);
-        return setup.bagsAmount;
     }
 
     public bool CanAdd(int amount)
@@ -38,10 +33,8 @@ public class LevelController : MonoBehaviour
         return bags > amount;
     }
 
-#if UNITY_EDITOR
     [ContextMenu("Debug LevelUp")]
-#endif
-    public void InvokeLevelUp()
+    public void LevelUp()
     {
         if ((int)CurrentLevel >= (int)PlayerLevel.SerialKiller)
             return;
@@ -51,6 +44,6 @@ public class LevelController : MonoBehaviour
 
         currentLevel = (PlayerLevel)index;
 
-        LevelUpped?.Invoke();
+        OnLevelUpped?.Invoke((int)currentLevel);
     }
 }

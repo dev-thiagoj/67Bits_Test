@@ -1,20 +1,13 @@
 using UnityEngine;
 
-public class LevelItem : MonoBehaviour, ILevelItem
+public class LevelItem : MonoBehaviour
 {
-    [SerializeField] PlayerLevel itemLevel;
-
     LevelController _levelController;
     Renderer _renderer;
 
-    public PlayerLevel Level => itemLevel;
-    public Renderer Renderer => _renderer;
-
-    public LevelController LevelController => _levelController;
-
     private void OnDestroy()
     {
-        _levelController.LevelUpped.RemoveListener(SetStatus);
+        _levelController.OnLevelUpped.RemoveListener(SetStatus);
     }
 
     private void Awake()
@@ -25,14 +18,14 @@ public class LevelItem : MonoBehaviour, ILevelItem
         if(!_renderer)
             _renderer = GetComponent<Renderer>();
 
-        _levelController.LevelUpped.AddListener(SetStatus);
+        _levelController.OnLevelUpped.AddListener(SetStatus);
 
         SetStatus();
     }
 
-    public void SetStatus()
+    public void SetStatus(int value = 0)
     {
-        bool status = _levelController.CurrentLevel == itemLevel;
-        _renderer.enabled = status;
+        var setup = _levelController.Setup.GetSetupByLevel((PlayerLevel)value);
+        _renderer.material.mainTexture = setup.pallete;
     }
 }

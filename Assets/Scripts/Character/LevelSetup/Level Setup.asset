@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _setups:
   - level: 0
-    target: 0
+    cost: 0
     bagsAmount: 3
-    clothes: {fileID: 0}
+    pallete: {fileID: 2800000, guid: 5b842dfe028abcd41b38a8edf5af087f, type: 3}
   - level: 1
-    target: 500
+    cost: 300
     bagsAmount: 5
-    clothes: {fileID: 0}
+    pallete: {fileID: 2800000, guid: a7f565db66429004f835cf576128dc57, type: 3}
   - level: 2
-    target: 1000
+    cost: 1500
     bagsAmount: 10
-    clothes: {fileID: 0}
+    pallete: {fileID: 2800000, guid: 5954a08cea1e9434f85cc510f6f899d4, type: 3}

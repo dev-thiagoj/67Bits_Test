@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerMovements : MonoBehaviour
 {
+    [SerializeField] PlayerStats _stats;
     public CharacterController Controller { get; private set; }
     public Animator Animator { get; private set; }
     public InputActions InputActions { get; private set; }
@@ -11,20 +12,12 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField] float runSpeed;
     [SerializeField] float rotationSpeed;
     float _currSpeed;
-    bool _canMove;
-
 
     int _walk;
     int _run;
     int _animSpeed;
 
     public float MovementX { get; private set; }
-
-    public bool CanMove
-    {
-        get => _canMove;
-        set => _canMove = value;
-    }
 
     private void OnDestroy()
     {
@@ -35,6 +28,9 @@ public class PlayerMovements : MonoBehaviour
 
     protected void Awake()
     {
+        if(!_stats)
+            _stats = GetComponent<PlayerStats>();
+
         if (!Controller)
             Controller = GetComponent<CharacterController>();
 
@@ -54,17 +50,16 @@ public class PlayerMovements : MonoBehaviour
         // Trigger the run
         InputActions.Gameplay.Run.performed += ctx => _currSpeed = runSpeed;
         InputActions.Gameplay.Run.canceled += ctx => _currSpeed = walkSpeed;
-
-
-        //Debug
-        CanMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!CanMove)
+        if (!_stats.CanMove)
+        {
+            Animator.Rebind();
             return;
+        }
 
         PlayerMovement();
     }

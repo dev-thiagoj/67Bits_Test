@@ -8,14 +8,14 @@ public class LevelSetup : ScriptableObject
     [SerializeField] List<Setup> _setups;
 
     public Setup GetSetupByLevel(PlayerLevel level) => _setups.Find(x => x.level == level);
-    public Setup GetSetupByTarget(int target) => _setups.Find(x => x.target == target);
+    public Setup GetSetupByTarget(int target) => _setups.Find(x => x.cost == target);
 }
 
 [Serializable]
 public class Setup
 {
     public PlayerLevel level;
-    public int target;
+    public int cost;
     public int bagsAmount;
-    public GameObject clothes;
+    public Texture pallete;
 }
