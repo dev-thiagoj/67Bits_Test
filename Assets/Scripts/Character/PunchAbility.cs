@@ -75,8 +75,8 @@ public class PunchAbility : MonoBehaviour
 
         if (!puppy)
             yield break;
-
-        PunchDamage(puppy);
+        
+        StartCoroutine(PunchDamage(puppy));
     }
 
     PuppyBehaviour GetPuppy()
@@ -97,7 +97,7 @@ public class PunchAbility : MonoBehaviour
         return null;
     }
 
-    void PunchDamage(PuppyBehaviour puppy)
+    IEnumerator PunchDamage(PuppyBehaviour puppy)
     {
         Vector3 explosionPos = transform.position;
         Collider[] colliders = new Collider[20];
@@ -117,6 +117,7 @@ public class PunchAbility : MonoBehaviour
             rb.mass = 1;
             rb.AddExplosionForce(punchForce, explosionPos, 2, upwardModifier);
 
+            yield return new WaitForSeconds(.05f);
             puppy.EnableRagdoll();
             break;
         }
