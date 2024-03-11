@@ -7,6 +7,7 @@ public class CarryBodies : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] PlayerMovements cMovement;
+    [SerializeField] LevelController levelController;
     [SerializeField] BodySensor bodiesSensor;
     [SerializeField] BodyBag bodyPFB;
     [Tooltip("Height offset between bodies")]
@@ -26,16 +27,18 @@ public class CarryBodies : MonoBehaviour
 
     public List<BodyBag> Bodies => _bodyBags; 
 
-#if UNITY_EDITOR
-    private void Reset()
+    private void Awake()
     {
         cMovement = GetComponent<PlayerMovements>();
+        levelController = GetComponent<LevelController>();
         bodiesSensor = GetComponentInChildren<BodySensor>();
+
+        if (heightOffset != 0)
+            return;
 
         //default value
         heightOffset = 0.3f;
     }
-#endif
 
     private void Update()
     {
@@ -47,11 +50,13 @@ public class CarryBodies : MonoBehaviour
 
 
     [ContextMenu("Add Body")]
-    public void Add()
+    public bool Add()
     {
+        if (!levelController.CanAdd(_bodyBags.Count))
+            return false;
+
         BodyBag body = Instantiate(bodyPFB);
         _bodyBags.Add(body);
-        int index = _bodyBags.IndexOf(body);
 
         Transform parent = _bodyBags.Count > 1 ?
             _bodyBags[^2].transform : bodiesSensor.transform;
@@ -68,6 +73,7 @@ public class CarryBodies : MonoBehaviour
         body.transform.localPosition = position;
 
         SetInertiaMovements();
+        return true;
     }
     public void Remove(int index)
     {

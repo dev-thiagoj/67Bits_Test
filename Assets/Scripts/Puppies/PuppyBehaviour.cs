@@ -65,7 +65,9 @@ public class PuppyBehaviour : MonoBehaviour
 
     public void Take()
     {
-        bag.Add();
+        if (!bag.Add())
+            return;
+
         OnBodyTaked?.Invoke();
         Destroy(gameObject);
     }
