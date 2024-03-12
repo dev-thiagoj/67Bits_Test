@@ -6,38 +6,28 @@ using UnityEngine.Events;
 public class CarryBodies : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] PlayerMovements cMovement;
     [SerializeField] LevelController levelController;
     [SerializeField] BodySensor bodiesSensor;
     [SerializeField] BodyBag bodyPFB;
-    [Tooltip("Height offset between bodies")]
-    [SerializeField] float heightOffset;
 
     [Header("Inertia Movement Setup")]
     [SerializeField] float maxAngle;
     [SerializeField] float speed;
     [SerializeField] float delay;
     bool canMove;
-    Coroutine currCoroutine;
+    readonly Coroutine currCoroutine;
 
     readonly List<BodyBag> _bodyBags = new();
 
     [Space]
-    public UnityEvent<float, int> OnMove;
+    public UnityEvent<int> OnMove;
 
-    public List<BodyBag> Bodies => _bodyBags; 
+    public List<BodyBag> Bodies => _bodyBags;
 
     private void Awake()
     {
-        cMovement = GetComponent<PlayerMovements>();
         levelController = GetComponent<LevelController>();
         bodiesSensor = GetComponentInChildren<BodySensor>();
-
-        if (heightOffset != 0)
-            return;
-
-        //default value
-        heightOffset = 0.3f;
     }
 
     private void Update()
@@ -58,23 +48,22 @@ public class CarryBodies : MonoBehaviour
         BodyBag body = Instantiate(bodyPFB);
         _bodyBags.Add(body);
 
-        Transform parent = _bodyBags.Count > 1 ?
-            _bodyBags[^2].transform : bodiesSensor.transform;
+        if (body == _bodyBags[0])
+        {
+            body.transform.SetLocalPositionAndRotation(
+            bodiesSensor.transform.position,
+            Quaternion.identity);
 
-        body.transform.SetParent(parent);
+            StartCoroutine(StartMove());
 
-        body.transform.SetLocalPositionAndRotation(
-            Vector3.zero,
-            bodyPFB.transform.rotation);
+            return true;
+        }
 
-        Vector3 position = body.transform.localPosition;
+        _bodyBags[^2].Next(body);
 
-        position.y = heightOffset;
-        body.transform.localPosition = position;
-
-        SetInertiaMovements();
         return true;
     }
+
     public void Remove(int index)
     {
         Destroy(_bodyBags[index].gameObject);
@@ -86,65 +75,22 @@ public class CarryBodies : MonoBehaviour
     [ContextMenu("Debug Bodies")]
     void DebugBodies()
     {
-        int amount = 10;
+        int amount = 20;
 
         for (int i = 0; i < amount; i++)
         {
-            BodyBag body = Instantiate(bodyPFB);
-            _bodyBags.Add(body);
-            int index = _bodyBags.IndexOf(body);
-
-            Transform parent = _bodyBags.Count > 1 ?
-                _bodyBags[^2].transform : bodiesSensor.transform;
-
-            body.transform.SetParent(parent);
-
-            body.transform.SetLocalPositionAndRotation(
-                Vector3.zero,
-                bodyPFB.transform.rotation);
-
-            Vector3 position = body.transform.localPosition;
-
-            position.y = heightOffset;
-            body.transform.localPosition = position;
-
-            SetInertiaMovements();
+            Add();
         }
     }
 #endif
-#endregion
+    #endregion
 
-    void SetInertiaMovements()
-    {
-        if (currCoroutine != null)
-        {
-            StopCoroutine(currCoroutine);
-            currCoroutine = null;
-        }
-
-        if(!canMove)
-            canMove = !canMove;
-
-        Coroutine coroutine = StartCoroutine(InertiaMovement());
-        currCoroutine = coroutine;
-    }
-
-    IEnumerator InertiaMovement()
+    IEnumerator StartMove()
     {
         while (true)
         {
-            float direction = cMovement.MovementX;
-            float angle = direction * maxAngle;
-
-            for (int i = 0; i < _bodyBags.Count; i++)
-            {
-                yield return new WaitForSeconds(delay);
-
-                BodyBag body = _bodyBags[i];
-                body.Rotate(angle, speed);
-            }
-
-            yield return new WaitForEndOfFrame();
+            _bodyBags[0].Move(bodiesSensor.transform);
+            yield return null;
         }
     }
 }

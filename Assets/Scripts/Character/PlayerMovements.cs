@@ -83,6 +83,8 @@ public class PlayerMovements : MonoBehaviour
         var movement = input.y * _currSpeed;
         Controller.SimpleMove(movement * forward);
 
+        //TODO carrybodies que se mexeu
+
         // Set animator state
         Animator.SetFloat(_animSpeed, input.y);
         Animator.SetBool(_walk, input != Vector2.zero);

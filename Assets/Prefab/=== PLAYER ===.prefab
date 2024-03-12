@@ -189,7 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4baebea2b7daf4441a27aa201d72e712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemLevel: 2
 --- !u!1 &1588019789952531458
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4baebea2b7daf4441a27aa201d72e712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemLevel: 2
 --- !u!1 &1898620018749354016
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4baebea2b7daf4441a27aa201d72e712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemLevel: 2
 --- !u!1 &2150407513570291271
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,6 +571,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  debugValue: 5000
 --- !u!114 &9083965748823154323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,7 +584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b972597a2f7408349ad58b84844bb470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 2
+  _stats: {fileID: 0}
+  walkSpeed: 3
   runSpeed: 5
   rotationSpeed: 50
 --- !u!114 &7687730202065312774
@@ -633,10 +632,9 @@ MonoBehaviour:
   levelController: {fileID: 0}
   bodiesSensor: {fileID: 8547579725247085829}
   bodyPFB: {fileID: 1719928828801630655, guid: 5ce043de1eb5019408477d99426006b5, type: 3}
-  heightOffset: 0.3
   maxAngle: 10
   speed: 1
-  delay: 0.05
+  delay: 0.01
   OnMove:
     m_PersistentCalls:
       m_Calls: []
@@ -656,7 +654,7 @@ MonoBehaviour:
   _setup: {fileID: 11400000, guid: 76a701d37bc3dc44c957da6af0d9ceb0, type: 2}
   materials: []
   renderers: []
-  LevelUpped:
+  OnLevelUpped:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &2484575654860972110
@@ -958,7 +956,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4baebea2b7daf4441a27aa201d72e712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemLevel: 0
 --- !u!1 &4204248742530463927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,7 +1475,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4baebea2b7daf4441a27aa201d72e712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemLevel: 2
 --- !u!1 &7388885389642212949
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,7 +1634,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4baebea2b7daf4441a27aa201d72e712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemLevel: 2
 --- !u!1 &8316848599871958443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,7 +1783,7 @@ Transform:
   m_GameObject: {fileID: 8675674343261694564}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.016, y: 1.74, z: -0.514}
+  m_LocalPosition: {x: 0, y: 2.2, z: -1.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
