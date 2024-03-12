@@ -91,7 +91,7 @@ public class UIStoreController : MonoBehaviour
 
         if (!canBuy)
         {
-            message = "Without enough money";
+            message = $"${price}: Without enough money";
             return false;
         }
 

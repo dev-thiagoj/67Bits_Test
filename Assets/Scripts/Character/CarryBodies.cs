@@ -15,7 +15,7 @@ public class CarryBodies : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float delay;
     bool canMove;
-    readonly Coroutine currCoroutine;
+    Coroutine currCoroutine;
 
     readonly List<BodyBag> _bodyBags = new();
 
@@ -89,6 +89,12 @@ public class CarryBodies : MonoBehaviour
     {
         while (true)
         {
+            if(_bodyBags.Count <= 0)
+            {
+                currCoroutine = null;
+                yield break;
+            }
+
             _bodyBags[0].Move(bodiesSensor.transform);
             yield return null;
         }
